@@ -1,0 +1,13 @@
+version: "3"
+services:
+  mqtt-broker:
+    build: hivemq
+    image: hivemq-custom:latest
+    ports:
+      - "1883:1883"
+      - "8080:8080"
+      - "8000:8000"
+    networks:
+      - webnet
+networks:
+  webnet:
