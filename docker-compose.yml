@@ -1,13 +1,22 @@
 version: "3"
 services:
-  mqtt-broker:
+  hivemq:
     build: hivemq
     image: hivemq-custom:latest
     ports:
       - "1883:1883"
       - "8080:8080"
       - "8000:8000"
-    networks:
-      - webnet
-networks:
-  webnet:
+  zookeeper:
+    image: wurstmeister/zookeeper
+  kafka:
+    image: wurstmeister/kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - ./kafka/persistence:/kafka
