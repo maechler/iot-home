@@ -2,21 +2,43 @@ version: "3"
 services:
   hivemq:
     build: hivemq
-    image: hivemq-custom:latest
+    restart: always
     ports:
-      - "1883:1883"
-      - "8080:8080"
-      - "8000:8000"
+      - 1883:1883
+      - 8080:8080
+      - 8000:8000
   zookeeper:
-    image: wurstmeister/zookeeper
+    image: bitnami/zookeeper:latest
+    restart: always
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: 'yes'
+    volumes:
+      - ./zookeeper/persistence:/bitnami/zookeeper
   kafka:
-    image: wurstmeister/kafka:latest
+    image: bitnami/kafka:latest
     depends_on:
       - zookeeper
+    restart: always
     ports:
-      - "9092:9092"
+      - 9092:9092
+      - 29092:29092
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: 'yes'
+      # see https://rmoff.net/2018/08/02/kafka-listeners-explained/
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
     volumes:
-      - ./kafka/persistence:/kafka
+      - ./kafka/persistence:/bitnami/kafka
+  mqtt2kafkabridge:
+    image: marmaechler/mqtt2kafkabridge:latest
+    depends_on:
+      - kafka
+      - hivemq
+    restart: always
+    environment:
+      KAFKA_BROKER_HOST: kafka:9092
+      MQTT_BROKER_HOST: hivemq:1883
+    volumes:
+      - ./mqtt2kafkabridge/logs:/opt/mqtt2kafkabridge/logs
