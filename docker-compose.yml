@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   hivemq:
     build: hivemq
@@ -13,7 +13,7 @@ services:
     environment:
       ALLOW_ANONYMOUS_LOGIN: 'yes'
     volumes:
-      - ./zookeeper/persistence:/bitnami/zookeeper
+      - ./zookeeper/data:/bitnami/zookeeper
   kafka:
     image: bitnami/kafka:latest
     depends_on:
@@ -30,9 +30,9 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
     volumes:
-      - ./kafka/persistence:/bitnami/kafka
+      - ./kafka/data:/bitnami/kafka
   mqtt2kafkabridge:
-    image: marmaechler/mqtt2kafkabridge:latest
+    image: marmaechler/mqtt2kafkabridge:1.0.0
     depends_on:
       - kafka
       - hivemq
@@ -40,5 +40,13 @@ services:
     environment:
       KAFKA_BROKER_HOST: kafka:9092
       MQTT_BROKER_HOST: hivemq:1883
+      MQTT_AUTOMATIC_RECONNECT: 'true'
     volumes:
       - ./mqtt2kafkabridge/logs:/opt/mqtt2kafkabridge/logs
+  influxdb:
+    image: influxdb:latest
+    ports:
+      - 8086:8086
+    restart: always
+    volumes:
+      - ./influxdb/data:/var/lib/influxdb

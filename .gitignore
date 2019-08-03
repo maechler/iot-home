@@ -1,10 +1,6 @@
 /.idea
 
-/kafka/persistence
-!/kafka/persistence/.gitkeep
-
-/zookeeper/persistence
-!/zookeeper/persistence/.gitkeep
-
+/kafka/data
+/zookeeper/data
+/influxdb/data
 /mqtt2kafkabridge/logs
-!/mqtt2kafkabridge/logs/.gitkeep
