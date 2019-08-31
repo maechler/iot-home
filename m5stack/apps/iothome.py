@@ -34,11 +34,11 @@ class CoreApp:
   }
   config = {
     'core_id': 'inside',
-    'broker_ip': '192.168.1.39',
+    'broker_ip': '192.168.1.6',
     'send_frequency': 0.1,
     'ui': {
-      'default_color': 0xEEEEEE
-    }
+      'default_color': 0xEEEEEE,
+    },
   }
 
   def __init__(self):
@@ -57,7 +57,7 @@ class CoreApp:
     self.isInitialzed = True
 
   def init_screen(self):
-    setScreenColor(0x000000)
+    lcd.clear(lcd.BLACK)
 
     self.status_circle = M5Circle(20, 215, 10, 0xaaaaaa, 0xaaaaaa)
     self.status_text = M5TextBox(40, 207, 'starting',  lcd.FONT_DejaVu18, self.config['ui']['default_color'])
@@ -99,7 +99,7 @@ class CoreApp:
     CoreApp.interrupt_counter = 1 + CoreApp.interrupt_counter
 
   def current_time(self):
-    return utime.time() + 946684800 # Convert utime to unix timestamp
+    return (utime.time() + 946684800) * 1000 # Convert utime to timestamp in milliseconds
 
   def run_decrement_interrupt_counter(self):
     state = machine.disable_irq()
