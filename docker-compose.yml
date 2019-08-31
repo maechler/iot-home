@@ -49,8 +49,20 @@ services:
       MQTT_AUTOMATIC_RECONNECT: 'true'
     volumes:
       - ./mqtt2kafkabridge/logs:/opt/mqtt2kafkabridge/logs
+  kafka2influxdbbridge:
+    image: marmaechler/kafka2influxdbbridge:latest
+    depends_on:
+      - kafka
+      - influxdb
+    restart: always
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      INFLUXDB_URL: http://influxdb:8086
+      INFLUXDB_DATABASE_NAME: iot_home
+    volumes:
+      - ./kafka2influxdbbridge/logs:/opt/kafka2influxdbbridge/logs
   influxdb:
-    image: influxdb:latest
+    image: influxdb:1.7
     ports:
       - 8086:8086
     restart: always

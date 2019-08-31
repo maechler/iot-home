@@ -4,3 +4,4 @@
 /zookeeper/data
 /influxdb/data
 /mqtt2kafkabridge/logs
+/kafka2influxdbbridge/logs
