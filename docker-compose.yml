@@ -31,6 +31,12 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
     volumes:
       - ./kafka/data:/bitnami/kafka
+  apache:
+    image: bitnami/apache:2.4
+    ports:
+      - 8888:8080
+    volumes:
+      - ./apache/influxdb_proxy.conf:/vhosts/influxdb_proxy.conf:ro
   mqtt2kafkabridge:
     image: marmaechler/mqtt2kafkabridge:1.0.0
     depends_on:
