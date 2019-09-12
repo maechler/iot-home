@@ -13,7 +13,7 @@ services:
     environment:
       ALLOW_ANONYMOUS_LOGIN: 'yes'
     volumes:
-      - ./zookeeper/data:/bitnami/zookeeper
+      - ./zookeeper/volumes:/bitnami/zookeeper
   kafka:
     image: bitnami/kafka:latest
     depends_on:
@@ -30,7 +30,7 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
     volumes:
-      - ./kafka/data:/bitnami/kafka
+      - ./kafka/volumes:/bitnami/kafka
   apache:
     image: bitnami/apache:2.4
     ports:
@@ -67,4 +67,4 @@ services:
       - 8086:8086
     restart: always
     volumes:
-      - ./influxdb/data:/var/lib/influxdb
+      - ./influxdb/volumes:/var/lib/influxdb

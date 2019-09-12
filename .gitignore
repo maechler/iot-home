@@ -1,7 +1,5 @@
 /.idea
 
-/kafka/data
-/zookeeper/data
-/influxdb/data
+/*/volumes
 /mqtt2kafkabridge/logs
 /kafka2influxdbbridge/logs
