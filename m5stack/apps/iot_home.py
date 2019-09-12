@@ -10,6 +10,7 @@ import utime
 import unit
 
 TFT_LED_PIN = const(32)
+SCREEN_TIMEOUT = 1000 * 60
 
 class CoreApp:
   interrupt_counter = 1 # set to 1 if sensor values should be read on startup, 0 else
@@ -69,6 +70,7 @@ class CoreApp:
   def __init__(self):
     self.isInitialzed = False
     self.screen_power = machine.Pin(TFT_LED_PIN, machine.Pin.OUT)
+    self.last_user_interaction = self.current_time()
 
   def init(self):
     if self.isInitialzed:
@@ -91,6 +93,11 @@ class CoreApp:
 
   def set_screen_on(self, is_on):
     self.screen_power.value(int(is_on))
+
+  def check_screen_timeout(self):
+    delta = self.current_time() - self.last_user_interaction
+    if delta > SCREEN_TIMEOUT:
+      self.set_screen_on(False)
 
   def init_sensors(self):
     self.active_sensors = {}
@@ -201,7 +208,12 @@ class CoreApp:
     while True:
       buttons_pressed = self.run_buttons()
 
+      self.check_screen_timeout()
+
       if buttons_pressed:
+        self.last_user_interaction = self.current_time()
+        self.set_screen_on(True)
+
         self.run_set_status('waiting' + (' ' if fake_space else ''))
         for sensor_name, sensor in self.active_sensors.items():
           sensor['label_text'].setText(sensor['config']['label'] + ' [' + sensor['config']['measurement_unit'] + ']' + (' ' if fake_space else ''))
