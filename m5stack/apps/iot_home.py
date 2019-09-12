@@ -91,10 +91,16 @@ class CoreApp:
     start_x = 10
     start_y = 10
     sensor_count = 0
+    align_right = False
 
     for sensor_name, sensor_config in self.sensors.items():
       if not sensor_config['is_active']:
         continue
+
+      if align_right:
+        start_x = 170
+      else:
+        start_x = 10
 
       current_sensor = unit.get(sensor_config['unit'], sensor_config['port'])
       self.active_sensors[sensor_name] = {
@@ -107,11 +113,11 @@ class CoreApp:
       }
 
       sensor_count = sensor_count + 1
-      start_y = start_y + 65
 
-      if sensor_count % 3 == 0:
-        start_x = 170
-        start_y = 10
+      if sensor_count % 2 == 0:
+        start_y = start_y + 65
+
+      align_right = not align_right
 
   def init_mqtt(self):
     self.m5mqtt = M5mqtt(self.config['core_id'], self.config['broker_ip'], 1883, '', '', 300)
