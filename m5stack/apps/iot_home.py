@@ -9,6 +9,8 @@ from lib import wifiCfg
 import utime
 import unit
 
+TFT_LED_PIN = const(32)
+
 class CoreApp:
   interrupt_counter = 1 # set to 1 if sensor values should be read on startup, 0 else
   sensors = {
@@ -66,6 +68,7 @@ class CoreApp:
 
   def __init__(self):
     self.isInitialzed = False
+    self.screen_power = machine.Pin(TFT_LED_PIN, machine.Pin.OUT)
 
   def init(self):
     if self.isInitialzed:
@@ -80,10 +83,14 @@ class CoreApp:
     self.isInitialzed = True
 
   def init_screen(self):
+    self.set_screen_on(True)
     lcd.clear(lcd.BLACK)
 
     self.status_circle = M5Circle(20, 215, 10, 0xaaaaaa, 0xaaaaaa)
     self.status_text = M5TextBox(40, 207, 'starting',  lcd.FONT_DejaVu18, self.config['ui']['default_color'])
+
+  def set_screen_on(self, is_on):
+    self.screen_power.value(int(is_on))
 
   def init_sensors(self):
     self.active_sensors = {}
