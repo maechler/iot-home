@@ -188,7 +188,7 @@ class CoreApp:
     self.run_set_status('waiting')
 
     timer = machine.Timer(-1)
-    timer.init(period=10000, mode=machine.Timer.PERIODIC, callback=CoreApp.interrupt_handler)
+    timer.init(period=int(1000 / CoreApp.config['send_frequency']), mode=machine.Timer.PERIODIC, callback=CoreApp.interrupt_handler)
     fake_space = True # use fake space to trick M5TextBox to render text even if unchanged
 
     while True:
