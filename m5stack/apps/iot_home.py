@@ -144,6 +144,7 @@ class CoreApp:
     def init_time(self):
         settime()
 
+    @staticmethod
     def interrupt_handler(timer):
         CoreApp.interrupt_counter = 1 + CoreApp.interrupt_counter
 
