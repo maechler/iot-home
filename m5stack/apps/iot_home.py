@@ -247,5 +247,4 @@ try:
     core_app.run()
 except Exception as e:
     lcd.clear(lcd.BLACK)
-    lcd.
-    print('Oops, an error occurred! ' + str(e), 0, 0, 0xd40707)
+    lcd.print('Oops, an error occurred! ' + str(e), 0, 0, 0xd40707)
