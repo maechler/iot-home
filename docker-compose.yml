@@ -68,3 +68,9 @@ services:
     restart: always
     volumes:
       - ./influxdb/volumes:/var/lib/influxdb
+  iothomeui:
+    image: marmaechler/iot-home-ui:latest
+    ports:
+      - 80:80
+      - 4200:4200
+    restart: always
