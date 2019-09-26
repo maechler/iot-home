@@ -72,5 +72,4 @@ services:
     image: marmaechler/iot-home-ui:latest
     ports:
       - 80:80
-      - 4200:4200
     restart: always
