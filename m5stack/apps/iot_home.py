@@ -156,6 +156,10 @@ class CoreApp:
     def current_time(self):
         return (utime.time() + 946684800) * 1000  # Convert utime to timestamp in milliseconds
 
+    def run_check_wifi(self):
+        if not wifiCfg.isconnected():
+            wifiCfg.reconnect()
+
     def run_check_screen_timeout(self):
         delta = self.current_time() - self.last_user_interaction
 
@@ -243,6 +247,7 @@ class CoreApp:
                     sensor['label_value'].setText('{:.2f}'.format(sensor['get_value']()))
 
             if CoreApp.interrupt_counter > 0:
+                self.run_check_wifi()
                 self.run_set_status('sending')
                 self.run_decrement_interrupt_counter()
 
