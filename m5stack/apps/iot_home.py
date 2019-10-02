@@ -53,7 +53,7 @@ class CoreApp:
             'measurement_unit': 'mg/L',
             'label': 'Earth',
             'value_key': 'analogValue',
-            'pbhub_address': 0x0,
+            'pbhub_address': 0x00,
             'unit': unit.PBHUB,
             'port': unit.PORTA,
         },
@@ -62,7 +62,7 @@ class CoreApp:
             'measurement_unit': 'lux',
             'label': 'Light',
             'value_key': 'analogValue',
-            'pbhub_address': 1,
+            'pbhub_address': 0x01,
             'unit': unit.PBHUB,
             'port': unit.PORTA,
         },
@@ -92,6 +92,22 @@ class CoreApp:
         self.init_sensors()
 
         self.isInitialzed = True
+
+    def pbhubAnalogRead(self, pbhub, pbhub_address):
+        #  See http://forum.m5stack.com/topic/1330/connect-units-to-pbhub
+        data = 0
+        max_val = 0
+        min_val = 750
+        for i in range(0, 10):
+            newdata = 750 - pbhub.analogRead(pbhub_address)
+            data += newdata
+            if newdata > max_val:
+                max_val = newdata
+            if newdata < min_val:
+                min_val = newdata
+        data -= (max_val + min_val)
+        data >>= 3
+        return round(max(1024 * data / 750, 0), 2)
 
     def init_screen(self):
         self.last_user_interaction = self.current_time()  # Startup
@@ -123,7 +139,7 @@ class CoreApp:
             self.active_sensors[sensor_name] = {
                 'name': sensor_name,
                 'config': sensor_config,
-                'get_value': lambda s=current_sensor, c=sensor_config: s.analogRead(c['pbhub_address']) if 'pbhub_address' in c else getattr(s, c['value_key']),
+                'get_value': lambda s=current_sensor, c=sensor_config: self.pbhubAnalogRead(s, c['pbhub_address']) if 'pbhub_address' in c else getattr(s, c['value_key']),
                 'sensor': current_sensor,
                 'label_text': MyTextBox(start_x, start_y + 30, sensor_config['label'] + ' [' + sensor_config['measurement_unit'] + ']', lcd.FONT_Default, CoreApp.config['ui']['default_color']),
                 'label_value': MyTextBox(start_x, start_y, '-', lcd.FONT_DejaVu24, CoreApp.config['ui']['default_color']),
