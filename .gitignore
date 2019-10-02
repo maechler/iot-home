@@ -1,5 +1,6 @@
 /.idea
 
 /*/volumes
+env-variables.env
 /mqtt2kafkabridge/logs
 /kafka2influxdbbridge/logs
