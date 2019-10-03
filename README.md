@@ -15,7 +15,7 @@ All the applications run in docker containers and thus can easily be deployed to
 - Install USB to UART driver from [silabs](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers)
 - Upload the firmware `UIFlow-v1.3.5-beta` to your M5Stack core using [M5Burner](https://m5stack.com/pages/download)
 - Install Visual Studio Code with [M5Stack extension](https://marketplace.visualstudio.com/items?itemName=curdeveryday.vscode-m5stack-mpy)
-- Install [SiLabsUSBDriverDisk](https://m5stack.com/pages/download SiLabsUSBDriverDisk)
+- Install [SiLabsUSBDriverDisk](https://m5stack.com/pages/download)
 - Connect your M5Stack device to your computer via USB
 - Connect all your sensors to your M5Stack core
 - Switch your M5Stack core to USB mode: `startup -> press button C -> USB mode`
