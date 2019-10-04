@@ -96,7 +96,7 @@ class CoreApp:
     def pbhubAnalogRead(self, pbhub, pbhub_address):
         #  See http://forum.m5stack.com/topic/1330/connect-units-to-pbhub
         data = 0
-        max_val = 0
+        max_val = 30
         min_val = 750
         for i in range(0, 10):
             newdata = 750 - pbhub.analogRead(pbhub_address)
